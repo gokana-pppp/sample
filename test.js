@@ -55,43 +55,58 @@ const scoreSheet = [
   // プログラムを書く
   let totalScore = 0
   
-  for (let i = 0; i < scoreSheet.length; i++) {
-    const isTurkey = scoreSheet[i].first === 10 && scoreSheet[i+1].first === 10 && scoreSheet[i+2].first === 10
-    const isDouble = scoreSheet[i].first === 10 && scoreSheet[i+1].first === 10
-    const isStrike = scoreSheet[i].first === 10 
-    const isLastFrame = scoreSheet[i].third !== undefined
-    const isSpare = scoreSheet[i].first !== 10 && scoreSheet[i].first + scoreSheet[i].second === 10 
-    
-    if (isTurkey) {
+    const isTurkey = () => {
+      for (let i = 0; i < scoreSheet.length; i++) {
+       return scoreSheet[i].first === 10 && scoreSheet[i+1].first === 10 && scoreSheet[i+2].first === 10
+    }}
+  
+    const isDouble = () => {
+      for (let i = 0; i < scoreSheet.length; i++) {
+       return scoreSheet[i].first === 10 && scoreSheet[i+1].first === 10
+    }}
+
+    const isStrike = (frame) => { 
+      return frame.first === 10 
+    }
+    const isLastFrame = (frame) => {
+      return frame.third !== undefined
+    }
+    const isSpare = (frame) => {
+      return frame.first !== 10 && frame.first + frame.second === 10 
+    }
+   
+    scoreSheet.forEach (frame => { 
+
+    if (isTurkey()) {
       // ターキーの時
       const frameTotalScore = 30
       totalScore += frameTotalScore
   
-    } else if (isDouble) {
+    } else if (isDouble()) {
       // ダブルの時
-      const frameTotalScore = 20 + scoreSheet[i+2].first
+      const frameTotalScore = 20 + frame.first
       totalScore += frameTotalScore
   
-    } else if (isStrike) {
+    } else if (isStrike(frame)) {
       // ストライクの時
-      const frameTotalScore = 10 + scoreSheet[i+1].first + scoreSheet[i+1].second
+      const frameTotalScore = 10 + frame.first + frame.second
       totalScore += frameTotalScore
   
-    } else if (isLastFrame) {
+    } else if (isLastFrame(frame)) {
       // 最終フレームの時
-      const frameTotalScore = scoreSheet[i].first + scoreSheet[i].second + scoreSheet[i].third
+      const frameTotalScore = frame.first + frame.second + frame.third
       totalScore += frameTotalScore
   
-    } else if (isSpare) {
+    } else if (isSpare(frame)) {
       // スペアの時
-      const frameTotalScore = 10 + scoreSheet[i+1].first
+      const frameTotalScore = 10 + frame.first
       totalScore += frameTotalScore
   
     } else {
       // それ以外の時
-      const frameTotalScore = scoreSheet[i].first + scoreSheet[i].second
+      const frameTotalScore = frame.first + frame.second
       totalScore += frameTotalScore
-    } 
-  }
+    } })
+
   
   console.log(totalScore);
